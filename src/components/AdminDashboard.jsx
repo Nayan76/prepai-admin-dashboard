@@ -1,3 +1,4 @@
+import AdminChatbot from './AdminChatbot';
 import React, { useState, useEffect } from 'react';
 import {
     LayoutDashboard,
@@ -437,10 +438,10 @@ const DashboardView = ({ onLogoutClick }) => {
                                 key={idx}
                                 onClick={action.action}
                                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${action.color === 'blue' ? 'bg-blue-50 text-blue-700 hover:bg-blue-100' :
-                                        action.color === 'green' ? 'bg-green-50 text-green-700 hover:bg-green-100' :
-                                            action.color === 'purple' ? 'bg-purple-50 text-purple-700 hover:bg-purple-100' :
-                                                action.color === 'red' ? 'bg-red-50 text-red-700 hover:bg-red-100' :
-                                                    'bg-orange-50 text-orange-700 hover:bg-orange-100'
+                                    action.color === 'green' ? 'bg-green-50 text-green-700 hover:bg-green-100' :
+                                        action.color === 'purple' ? 'bg-purple-50 text-purple-700 hover:bg-purple-100' :
+                                            action.color === 'red' ? 'bg-red-50 text-red-700 hover:bg-red-100' :
+                                                'bg-orange-50 text-orange-700 hover:bg-orange-100'
                                     }`}
                             >
                                 {React.cloneElement(action.icon, { className: "w-5 h-5" })}
@@ -488,8 +489,12 @@ const DashboardView = ({ onLogoutClick }) => {
                     </div>
                 </div>
             </div>
+
+            {/* ✅ PLACE CHATBOT HERE - Only shows on Dashboard */}
+            <AdminChatbot />
         </div>
     );
+
 };
 
 // Users View with Working Pagination and Add User
@@ -651,8 +656,8 @@ const UsersView = () => {
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${user.role === 'admin' ? 'bg-purple-100 text-purple-700' :
-                                                user.role === 'mentor' ? 'bg-blue-100 text-blue-700' :
-                                                    'bg-gray-100 text-gray-700'
+                                            user.role === 'mentor' ? 'bg-blue-100 text-blue-700' :
+                                                'bg-gray-100 text-gray-700'
                                             }`}>
                                             {user.role}
                                         </span>
@@ -667,8 +672,8 @@ const UsersView = () => {
                                     <td className="px-6 py-4 text-sm text-gray-900">{user.interviews}</td>
                                     <td className="px-6 py-4">
                                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${user.plan === 'Enterprise' ? 'bg-orange-100 text-orange-700' :
-                                                user.plan === 'Pro' ? 'bg-blue-100 text-blue-700' :
-                                                    'bg-gray-100 text-gray-700'
+                                            user.plan === 'Pro' ? 'bg-blue-100 text-blue-700' :
+                                                'bg-gray-100 text-gray-700'
                                             }`}>
                                             {user.plan}
                                         </span>
@@ -871,8 +876,8 @@ const QuestionsView = () => {
                     <div key={q.id} className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                         <div className="flex items-start justify-between mb-4">
                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${q.difficulty === 'Hard' ? 'bg-red-100 text-red-700' :
-                                    q.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
-                                        'bg-green-100 text-green-700'
+                                q.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                                    'bg-green-100 text-green-700'
                                 }`}>
                                 {q.difficulty}
                             </span>
@@ -985,8 +990,8 @@ const AIPerformanceView = () => {
                                             key={model.name}
                                             onClick={() => handleSwitchModel(model.name)}
                                             className={`w-full p-4 rounded-xl border-2 text-left transition-colors ${currentModel === model.name
-                                                    ? 'border-blue-500 bg-blue-50'
-                                                    : 'border-gray-200 hover:border-blue-300'
+                                                ? 'border-blue-500 bg-blue-50'
+                                                : 'border-gray-200 hover:border-blue-300'
                                                 }`}
                                         >
                                             <div className="flex items-center justify-between">
@@ -1236,8 +1241,8 @@ const SettingsView = () => {
                         <button
                             onClick={() => setSettings({ ...settings, twoFactorAuth: !settings.twoFactorAuth })}
                             className={`px-4 py-2 rounded-lg text-sm font-medium ${settings.twoFactorAuth
-                                    ? 'bg-green-600 text-white hover:bg-green-700'
-                                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                                ? 'bg-green-600 text-white hover:bg-green-700'
+                                : 'bg-blue-600 text-white hover:bg-blue-700'
                                 }`}
                         >
                             {settings.twoFactorAuth ? 'Enabled' : 'Enable'}
