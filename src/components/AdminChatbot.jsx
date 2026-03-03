@@ -3,7 +3,7 @@ import { MessageSquare, X, Send, Bot, User, Sparkles, Loader } from 'lucide-reac
 
 // Using Google's Gemini API (Free tier available)
 // Get API key from: https://makersuite.google.com/app/apikey
-const API_KEY = 'AIzaSyAC8XbkPoKwKAqLSINZnlHAMdjXUjoGW80'; // Replace with your actual key
+const API_KEY = 'YOUR_API_KEY'; // Replace with your actual key
 
 const AdminChatbot = () => {
     const [isOpen, setIsOpen] = useState(false);
