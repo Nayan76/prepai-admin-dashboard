@@ -32,8 +32,7 @@ const AdminDashboard = () => {
                 return <UsersView />;
             case 'questions':
                 return <QuestionsView />;
-            case 'ai-performance':
-                return <AIPerformanceView />;
+            // AI Performance REMOVED
             case 'analytics':
                 return <AnalyticsView />;
             case 'settings':

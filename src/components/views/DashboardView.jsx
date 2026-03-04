@@ -3,30 +3,30 @@ import {
     Users,
     FileText,
     MessageSquare,
-    Shield,
-    Brain,
-    BarChart3,
     Target,
-    Award,
-    Activity,
-    CheckCircle,
-    X
+    Activity
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import StatCard from '../common/StatCard';
 import QuickActionButton from '../common/QuickActionButton';
-import HealthBar from '../common/HealthBar';
-import { mockStats, userGrowthData } from '../../data/mockData';
+import { userGrowthData } from '../../data/mockData';
 
 const DashboardView = () => {
     const [activeModal, setActiveModal] = useState(null);
 
     const quickActions = [
-        { icon: <Shield />, label: "Moderate Content", color: "red", action: () => setActiveModal('moderate') },
-        { icon: <Brain />, label: "Retrain AI Model", color: "purple", action: () => setActiveModal('retrain') },
-        { icon: <Users />, label: "Add New Mentor", color: "blue", action: () => setActiveModal('mentor') },
-        { icon: <FileText />, label: "Add Question", color: "green", action: () => setActiveModal('question') },
-        { icon: <MessageSquare />, label: "Broadcast Message", color: "orange", action: () => setActiveModal('broadcast') },
+        {
+            icon: <FileText />,
+            label: "Add Question",
+            color: "green",
+            action: () => setActiveModal('question')
+        },
+        {
+            icon: <MessageSquare />,
+            label: "Broadcast Message",
+            color: "orange",
+            action: () => setActiveModal('broadcast')
+        },
     ];
 
     return (
@@ -36,22 +36,89 @@ const DashboardView = () => {
                 <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
                     <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-lg font-bold">Action</h3>
+                            <h3 className="text-lg font-bold">
+                                {activeModal === 'question' && "Add New Question"}
+                                {activeModal === 'broadcast' && "Broadcast Message"}
+                            </h3>
                             <button onClick={() => setActiveModal(null)} className="text-gray-400 hover:text-gray-600">
                                 <X className="w-6 h-6" />
                             </button>
                         </div>
-                        <p className="text-gray-600">This would open the {activeModal} functionality.</p>
+
+                        <div className="space-y-4">
+                            {activeModal === 'question' && (
+                                <>
+                                    <textarea placeholder="Enter question text..." className="w-full px-4 py-2 border rounded-lg h-24 resize-none" />
+                                    <select className="w-full px-4 py-2 border rounded-lg">
+                                        <option>Select Category</option>
+                                        <option>System Design</option>
+                                        <option>Algorithms</option>
+                                        <option>Behavioral</option>
+                                        <option>React</option>
+                                        <option>JavaScript</option>
+                                    </select>
+                                    <select className="w-full px-4 py-2 border rounded-lg">
+                                        <option>Select Difficulty</option>
+                                        <option>Easy</option>
+                                        <option>Medium</option>
+                                        <option>Hard</option>
+                                    </select>
+                                    <button
+                                        onClick={() => { alert('Question added successfully!'); setActiveModal(null); }}
+                                        className="w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                                    >
+                                        Add Question
+                                    </button>
+                                </>
+                            )}
+
+                            {activeModal === 'broadcast' && (
+                                <>
+                                    <textarea placeholder="Type your message to all users..." className="w-full px-4 py-2 border rounded-lg h-32 resize-none" />
+                                    <div className="flex gap-2">
+                                        <button className="px-3 py-1 bg-gray-100 rounded-full text-xs">All Users</button>
+                                        <button className="px-3 py-1 bg-gray-100 rounded-full text-xs">Pro Only</button>
+                                        <button className="px-3 py-1 bg-gray-100 rounded-full text-xs">Mentors</button>
+                                    </div>
+                                    <button
+                                        onClick={() => { alert('Message broadcasted to all users!'); setActiveModal(null); }}
+                                        className="w-full py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
+                                    >
+                                        Send Broadcast
+                                    </button>
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
             )}
 
-            {/* Stats Grid */}
+            {/* Stats Grid - Trends removed */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <StatCard title="Total Users" value="12,453" trend="+12.3%" trendUp={true} icon={<Users className="w-6 h-6 text-blue-600" />} color="blue" />
-                <StatCard title="Active Interviews" value="892" trend="+5.2%" trendUp={true} icon={<Activity className="w-6 h-6 text-green-600" />} color="green" />
-                <StatCard title="Questions Generated" value="45,632" trend="+8.1%" trendUp={true} icon={<FileText className="w-6 h-6 text-purple-600" />} color="purple" />
-                <StatCard title="Success Rate" value="78.5%" trend="+2.4%" trendUp={true} icon={<Target className="w-6 h-6 text-orange-600" />} color="orange" />
+                <StatCard
+                    title="Total Users"
+                    value="12,453"
+                    icon={<Users className="w-6 h-6 text-blue-600" />}
+                    color="blue"
+                />
+                <StatCard
+                    title="Active Interviews"
+                    value="892"
+                    icon={<Activity className="w-6 h-6 text-green-600" />}
+                    color="green"
+                />
+                <StatCard
+                    title="Questions Generated"
+                    value="45,632"
+                    icon={<FileText className="w-6 h-6 text-purple-600" />}
+                    color="purple"
+                />
+                <StatCard
+                    title="Success Rate"
+                    value="78.5%"
+                    icon={<Target className="w-6 h-6 text-orange-600" />}
+                    color="orange"
+                />
             </div>
 
             {/* Charts & Quick Actions */}
@@ -99,38 +166,22 @@ const DashboardView = () => {
                 </div>
             </div>
 
-            {/* Recent & Health */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-                    <h3 className="text-lg font-bold text-gray-900 mb-6">Recent Interviews</h3>
-                    <div className="space-y-4">
-                        {[1001, 1002, 1003, 1004].map((id) => (
-                            <div key={id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-                                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                    <Users className="w-5 h-5 text-blue-600" />
-                                </div>
-                                <div className="flex-1">
-                                    <p className="font-semibold text-gray-900">User #{id}</p>
-                                    <p className="text-sm text-gray-500">System Design Interview • 45 mins</p>
-                                </div>
-                                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Completed</span>
+            {/* Recent Interviews Only */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-6">Recent Interviews</h3>
+                <div className="space-y-4">
+                    {[1001, 1002, 1003, 1004].map((id) => (
+                        <div key={id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+                            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                <Users className="w-5 h-5 text-blue-600" />
                             </div>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-                    <h3 className="text-lg font-bold text-gray-900 mb-6">System Health</h3>
-                    <div className="space-y-6">
-                        <HealthBar label="API Response Time" value={92} color="green" />
-                        <HealthBar label="AI Model Accuracy" value={94} color="blue" />
-                        <HealthBar label="Database Load" value={67} color="yellow" />
-                        <HealthBar label="Storage Capacity" value={45} color="green" />
-                    </div>
-                    <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-3">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
-                        <span className="text-green-800 font-medium">All systems operational</span>
-                    </div>
+                            <div className="flex-1">
+                                <p className="font-semibold text-gray-900">User #{id}</p>
+                                <p className="text-sm text-gray-500">System Design Interview • 45 mins</p>
+                            </div>
+                            <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Completed</span>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

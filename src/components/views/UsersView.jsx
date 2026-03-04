@@ -1,21 +1,32 @@
 import React, { useState } from 'react';
-import { Search, Filter, UserPlus, Download, ChevronLeft, ChevronRight, Eye, Edit, Trash2, X } from 'lucide-react';
-import { mockUsers } from '../../data/mockData';
+import { Search, UserPlus, Download, ChevronLeft, ChevronRight, Eye, Edit, Trash2, X } from 'lucide-react';
+
+// Updated mock data with domains instead of roles
+const mockUsersData = [
+    { id: 1, name: "Sarah Chen", email: "sarah@email.com", domain: "QEA", status: "active", interviews: 12, lastActive: "2 mins ago" },
+    { id: 2, name: "Mike Ross", email: "mike@email.com", domain: "Cloud", status: "active", interviews: 8, lastActive: "1 hour ago" },
+    { id: 3, name: "Emma Watson", email: "emma@email.com", domain: "SAP", status: "active", interviews: 45, lastActive: "5 mins ago" },
+    { id: 4, name: "John Doe", email: "john@email.com", domain: "QEA", status: "suspended", interviews: 3, lastActive: "3 days ago" },
+    { id: 5, name: "Alice Johnson", email: "alice@email.com", domain: "Cloud", status: "active", interviews: 0, lastActive: "Just now" },
+    { id: 6, name: "Bob Smith", email: "bob@email.com", domain: "SAP", status: "active", interviews: 15, lastActive: "10 mins ago" },
+    { id: 7, name: "Carol White", email: "carol@email.com", domain: "QEA", status: "active", interviews: 32, lastActive: "1 day ago" },
+    { id: 8, name: "David Brown", email: "david@email.com", domain: "Cloud", status: "suspended", interviews: 5, lastActive: "5 days ago" },
+];
 
 const UsersView = () => {
-    const [users, setUsers] = useState(mockUsers);
+    const [users, setUsers] = useState(mockUsersData);
     const [currentPage, setCurrentPage] = useState(1);
     const [showAddUser, setShowAddUser] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [filterRole, setFilterRole] = useState('all');
+    const [filterDomain, setFilterDomain] = useState('all');
 
     const usersPerPage = 5;
 
     const filteredUsers = users.filter(user => {
         const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.email.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesRole = filterRole === 'all' || user.role === filterRole;
-        return matchesSearch && matchesRole;
+        const matchesDomain = filterDomain === 'all' || user.domain === filterDomain;
+        return matchesSearch && matchesDomain;
     });
 
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
@@ -29,11 +40,10 @@ const UsersView = () => {
             id: users.length + 1,
             name: formData.get('name'),
             email: formData.get('email'),
-            role: formData.get('role'),
+            domain: formData.get('domain'),
             status: 'active',
             interviews: 0,
-            lastActive: 'Just now',
-            plan: formData.get('plan')
+            lastActive: 'Just now'
         };
         setUsers([...users, newUser]);
         setShowAddUser(false);
@@ -42,8 +52,8 @@ const UsersView = () => {
 
     const handleExport = () => {
         const csvContent = "data:text/csv;charset=utf-8,"
-            + "Name,Email,Role,Status,Plan,Interviews\n"
-            + users.map(u => `${u.name},${u.email},${u.role},${u.status},${u.plan},${u.interviews}`).join("\n");
+            + "Name,Email,Domain,Status,Interviews\n"
+            + users.map(u => `${u.name},${u.email},${u.domain},${u.status},${u.interviews}`).join("\n");
 
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
@@ -52,6 +62,19 @@ const UsersView = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    };
+
+    // Domain options
+    const domains = ['all', 'QEA', 'Cloud', 'SAP'];
+
+    // Domain badge colors
+    const getDomainColor = (domain) => {
+        const colors = {
+            'QEA': 'bg-purple-100 text-purple-700',
+            'Cloud': 'bg-blue-100 text-blue-700',
+            'SAP': 'bg-orange-100 text-orange-700'
+        };
+        return colors[domain] || 'bg-gray-100 text-gray-700';
     };
 
     return (
@@ -69,17 +92,11 @@ const UsersView = () => {
                         <form onSubmit={handleAddUser} className="space-y-4">
                             <input name="name" type="text" placeholder="Full Name" required className="w-full px-4 py-2 border rounded-lg" />
                             <input name="email" type="email" placeholder="Email Address" required className="w-full px-4 py-2 border rounded-lg" />
-                            <select name="role" required className="w-full px-4 py-2 border rounded-lg">
-                                <option value="">Select Role</option>
-                                <option value="user">User</option>
-                                <option value="mentor">Mentor</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                            <select name="plan" required className="w-full px-4 py-2 border rounded-lg">
-                                <option value="">Select Plan</option>
-                                <option value="Free">Free</option>
-                                <option value="Pro">Pro</option>
-                                <option value="Enterprise">Enterprise</option>
+                            <select name="domain" required className="w-full px-4 py-2 border rounded-lg">
+                                <option value="">Select Domain</option>
+                                <option value="QEA">QEA</option>
+                                <option value="Cloud">Cloud</option>
+                                <option value="SAP">SAP</option>
                             </select>
                             <button type="submit" className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                                 Add User
@@ -103,14 +120,15 @@ const UsersView = () => {
                             />
                         </div>
                         <select
-                            value={filterRole}
-                            onChange={(e) => setFilterRole(e.target.value)}
+                            value={filterDomain}
+                            onChange={(e) => setFilterDomain(e.target.value)}
                             className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
-                            <option value="all">All Roles</option>
-                            <option value="user">User</option>
-                            <option value="mentor">Mentor</option>
-                            <option value="admin">Admin</option>
+                            {domains.map(domain => (
+                                <option key={domain} value={domain}>
+                                    {domain === 'all' ? 'All Domains' : domain}
+                                </option>
+                            ))}
                         </select>
                     </div>
                     <div className="flex items-center gap-3">
@@ -136,10 +154,9 @@ const UsersView = () => {
                         <thead className="bg-gray-50">
                             <tr>
                                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">User</th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Role</th>
+                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Domain</th>
                                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
                                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Interviews</th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Plan</th>
                                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Last Active</th>
                                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Actions</th>
                             </tr>
@@ -159,11 +176,8 @@ const UsersView = () => {
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${user.role === 'admin' ? 'bg-purple-100 text-purple-700' :
-                                                user.role === 'mentor' ? 'bg-blue-100 text-blue-700' :
-                                                    'bg-gray-100 text-gray-700'
-                                            }`}>
-                                            {user.role}
+                                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getDomainColor(user.domain)}`}>
+                                            {user.domain}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4">
@@ -174,14 +188,6 @@ const UsersView = () => {
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-sm text-gray-900">{user.interviews}</td>
-                                    <td className="px-6 py-4">
-                                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${user.plan === 'Enterprise' ? 'bg-orange-100 text-orange-700' :
-                                                user.plan === 'Pro' ? 'bg-blue-100 text-blue-700' :
-                                                    'bg-gray-100 text-gray-700'
-                                            }`}>
-                                            {user.plan}
-                                        </span>
-                                    </td>
                                     <td className="px-6 py-4 text-sm text-gray-500">{user.lastActive}</td>
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-2">

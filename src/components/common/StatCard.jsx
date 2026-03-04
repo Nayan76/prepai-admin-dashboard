@@ -1,6 +1,6 @@
 import React from 'react';
 
-const StatCard = ({ title, value, trend, trendUp, icon, color }) => {
+const StatCard = ({ title, value, icon, color }) => {
     const bgColors = {
         blue: 'bg-blue-100',
         green: 'bg-green-100',
@@ -14,9 +14,7 @@ const StatCard = ({ title, value, trend, trendUp, icon, color }) => {
                 <div className={`p-3 rounded-xl ${bgColors[color]}`}>
                     {icon}
                 </div>
-                <span className={`flex items-center gap-1 text-sm font-medium ${trendUp ? 'text-green-600' : 'text-red-600'}`}>
-                    {trendUp ? '↑' : '↓'} {trend}
-                </span>
+                {/* Trend indicator REMOVED */}
             </div>
             <h3 className="text-2xl font-bold text-gray-900 mb-1">{value}</h3>
             <p className="text-sm text-gray-500">{title}</p>

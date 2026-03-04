@@ -6,7 +6,6 @@ import {
     BarChart3,
     Settings,
     Brain,
-    Zap,
     LogOut,
     X
 } from 'lucide-react';
@@ -29,11 +28,11 @@ const SidebarItem = ({ icon, label, id, active, setActive, collapsed, badge }) =
 );
 
 const Sidebar = ({ activeTab, setActiveTab, sidebarOpen, setSidebarOpen, onLogout }) => {
+    // AI Performance REMOVED from menu
     const menuItems = [
         { icon: <LayoutDashboard />, label: "Dashboard", id: "dashboard" },
         { icon: <Users />, label: "Users", id: "users", badge: "New" },
         { icon: <FileText />, label: "Questions DB", id: "questions" },
-        { icon: <Zap />, label: "AI Performance", id: "ai-performance" },
         { icon: <BarChart3 />, label: "Analytics", id: "analytics" },
         { icon: <Settings />, label: "Settings", id: "settings" },
     ];
