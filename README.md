@@ -88,3 +88,4 @@ A comprehensive, feature-rich admin dashboard for managing an AI-powered Intervi
    ```bash
    git clone https://github.com/YOUR_USERNAME/prepai-admin-dashboard.git
    cd prepai-admin-dashboard
+   npm install @google/generative-ai
